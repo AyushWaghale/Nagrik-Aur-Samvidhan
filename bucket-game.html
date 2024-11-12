@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Sorting Game</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        .start-screen, .game-container, .end-screen {
+            max-width: 600px;
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .feedback {
+            font-weight: bold;
+            color: red;
+            font-size: 1.2rem;
+        }
+
+        .bucket {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #e0f7fa; /* Light blue */
+            border: 2px dashed #00838f; /* Teal */
+        }
+
+        .bucket:hover {
+            background-color: #b2ebf2; /* Lighter blue */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .bucket-fundamental-right {
+            background-color: #e1bee7; /* Light purple */
+        }
+
+        .bucket-fundamental-duty {
+            background-color: #ffe082; /* Light yellow */
+        }
+
+        .score, .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .dragging {
+            opacity: 0.5;
+        }
+
+        .hint-button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body class="d-flex justify-content-center align-items-center bg-light vh-100">
+
+    <!-- Start Screen -->
+    <div class="container text-center start-screen active" id="start-screen">
+        <h2 class="mb-4">Welcome to the Card Sorting Game</h2>
+        <p class="mb-4">Test your knowledge of Fundamental Rights and Duties!</p>
+        <button class="btn btn-primary btn-lg" onclick="startGame()">Start Game</button>
+    </div>
+
+    <!-- Game Container -->
+    <div class="container game-container p-4 bg-white rounded shadow-lg" id="game-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Level 1</h2>
+            <button class="btn btn-warning btn-sm" onclick="useHint()">HINT <span id="hint-count">9</span></button>
+            <div class="timer badge bg-secondary p-2" id="timer">00:30</div>
+        </div>
+        <div class="alert alert-info text-center">
+            <p class="mb-0">Drag the Cards to the Correct Bucket</p>
+            <span id="progress">1/10</span>
+        </div>
+        <div class="card mx-auto p-3 mb-4 text-center border" id="current-card" draggable="true">
+            <img src="https://via.placeholder.com/200x150" alt="Card Image" class="img-fluid mb-2" id="card-image">
+            <p id="card-title" class="card-title">Card Title</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-6">
+                <div class="bucket bg-light p-3 border rounded bucket-fundamental-right" data-bucket="Fundamental Right" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <img src="./image.png" alt="Fundamental Right Icon" class="img-fluid mb-2">
+                    <p>Fundamental Right</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bucket bg-light p-3 border rounded bucket-fundamental-duty" data-bucket="Fundamental Duty" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <img src="./image.png" alt="Fundamental Duty Icon" class="img-fluid mb-2">
+                    <p>Fundamental Duty</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 feedback" id="feedback"></div>
+        <div class="mt-2 score badge bg-success p-2" id="score">Score: +0</div>
+    </div>
+
+    <!-- End Screen -->
+    <div class="container text-center end-screen p-4 bg-white rounded shadow-lg" id="end-screen">
+        <h2 class="mb-4">Game Over!</h2>
+        <p>Your Final Score: <span id="final-score">0</span></p>
+        <button class="btn btn-primary btn-lg" onclick="playAgain()">Play Again</button>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const cardData = [
+            { title: 'Equality before law\nEqual Protection of law', image: 'https://cdn-images.prepp.in/public/image/Equality_before_law_and_Equal_Protection_of_laws_17c7395615cd9443256c2240c1af7ff5.png?tr=w-311,h-154,c-force', correctBucket: 'Fundamental Right' },
+            { title: 'Keep Environment Clean', image: 'https://www.shutterstock.com/shutterstock/photos/2345640483/display_1500/stock-vector-keep-your-environment-clean-vector-sign-2345640483.jpg', correctBucket: 'Fundamental Duty' },
+            { title: 'Right to Freedom', image: 'https://cdn.slidesharecdn.com/ss_thumbnails/presentation-150504145048-conversion-gate02-thumbnail.jpg?width=640&height=640&fit=bounds', correctBucket: 'Fundamental Right' },
+            { title: 'Right to Education', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiiMnP4eHJcJRVOVqyqD3oL4hvnr3J1ORtFw&s', correctBucket: 'Fundamental Right' },
+            { title: 'Right to Speech', image: 'https://legalserviceindia.com/legal/uploads/therighttofreedomofspeechitslimitations_5360527321.jpg', correctBucket: 'Fundamental Right' },
+            { title: 'Right to Equality', image: 'https://sociallawstoday.com/wp-content/uploads/2023/03/20220408-1.jpg', correctBucket: 'Fundamental Right' },
+            { title: 'Protecting Wildlife', image: 'https://i0.wp.com/apeejay.news/wp-content/uploads/2023/08/050823-wildlife-conservation-01.jpg?resize=740%2C570&ssl=1', correctBucket: 'Fundamental Duty' },
+            { title: 'Respecting the National Flag', image: 'https://i.ytimg.com/vi/sdMD1pYmvI8/maxresdefault.jpg', correctBucket: 'Fundamental Duty' },
+            { title: 'Promoting Harmony', image: 'https://i0.wp.com/positiveparentingconnection.net/wp-content/uploads/2011/06/siblingsharmony.jpg?ssl=1', correctBucket: 'Fundamental Duty' },
+            { title: 'Safeguarding Public Property', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsO7MxHceKEC-8m0z8UAlTGc4-5AZIUEbvx9MBLQOo346mjdGhQiOeX2JjLSsB6MtT0uU&usqp=CAU', correctBucket: 'Fundamental Duty' },
+        ];
+
+        let currentCardIndex = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let hintsLeft = 9;
+        let timerInterval;
+
+        const cardElement = document.getElementById('current-card');
+        const gameContainer = document.getElementById('game-container');
+        const startScreen = document.getElementById('start-screen');
+        const endScreen = document.getElementById('end-screen');
+
+        cardElement.addEventListener('dragstart', dragStart);
+
+        function startGame() {
+            startScreen.classList.remove('active');
+            gameContainer.classList.add('active');
+            updateCard();
+            startTimer();
+        }
+
+        function updateCard() {
+            if (currentCardIndex < cardData.length) {
+                const card = cardData[currentCardIndex];
+                document.getElementById('card-image').src = card.image;
+                document.getElementById('card-title').textContent = card.title;
+                document.getElementById('progress').textContent = `${currentCardIndex + 1}/${cardData.length}`;
+            } else {
+                endGame();
+            }
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function dragStart(event) {
+            event.dataTransfer.setData("text/plain", cardData[currentCardIndex].correctBucket);
+            cardElement.classList.add('dragging');
+        }
+
+        cardElement.addEventListener('dragend', () => {
+            cardElement.classList.remove('dragging');
+        });
+
+        function drop(event) {
+            event.preventDefault();
+            const bucketType = event.target.closest('.bucket').getAttribute('data-bucket');
+            const correctBucket = event.dataTransfer.getData("text");
+
+            const feedbackElement = document.getElementById('feedback');
+
+            if (bucketType === correctBucket) {
+                score += 100; // Increment score
+                feedbackElement.textContent = 'Correct!';
+                feedbackElement.style.color = 'green';
+                feedbackElement.classList.add('animate__animated', 'animate__fadeIn'); // Add animation
+            } else {
+                feedbackElement.textContent = 'Wrong!';
+                feedbackElement.style.color = 'red';
+                feedbackElement.classList.add('animate__animated', 'animate__shakeX'); // Add animation
+            }
+
+            document.getElementById('score').textContent = `Score: +${score}`;
+            currentCardIndex++;
+            
+            setTimeout(() => {
+                feedbackElement.textContent = '';
+                updateCard();
+            }, 1000);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = formatTime(timeLeft);
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        function useHint() {
+            if (hintsLeft > 0) {
+                hintsLeft--;
+                document.getElementById('hint-count').textContent = hintsLeft;
+                // Provide a hint (you can modify this logic)
+                const hintMessage = `Hint: The correct bucket for "${cardData[currentCardIndex].title}" is "${cardData[currentCardIndex].correctBucket}".`;
+                alert(hintMessage);
+            } else {
+                alert("No hints left!");
+            }
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById('final-score').textContent = score;
+            gameContainer.classList.remove('active');
+            endScreen.classList.add('active');
+        }
+
+        function playAgain() {
+            currentCardIndex = 0;
+            score = 0;
+            timeLeft = 30;
+            hintsLeft = 9;
+            document.getElementById('score').textContent = `Score: +${score}`;
+            document.getElementById('timer').textContent = formatTime(timeLeft);
+            startGame();
+        }
+    </script>
+</body>
+</html>

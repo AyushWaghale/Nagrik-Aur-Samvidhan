@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decode Article 15</title>
+  <link rel="stylesheet"  href="explore.css"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <!-- Font Awesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+          
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM4IYhGehV5P3sFz4p3A7S3Q76xTV9VfBjjfEKT" crossorigin="anonymous" />
+
+  <style>
+    /* General Styles */
+    
+
+    /* Header Styling */
+    /* Back Button Styling */
+
+
+.back-button {
+   position: absolute;
+   top: 50%;
+   left: 15px;
+   transform: translateY(-50%);
+   background: transparent;
+   border: none;
+   color: #0d010f;
+   font-size: 24px;
+   cursor: pointer;
+   padding: 0;
+ }
+
+    /* Card Styling */
+    .card {
+      background: #333;
+      border: none;
+      border-radius: 15px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-img-top {
+      width: 100%;
+      height: 250px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      object-fit: cover;
+      filter: brightness(0.8);
+      transition: filter 0.3s ease;
+    }
+
+    .card:hover .card-img-top {
+      filter: brightness(1);
+    }
+
+    .card-body {
+      text-align: center;
+    }
+
+    .game-container {
+      max-width: 600px;
+      width: 100%;
+      padding: 30px;
+      margin: 20px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: slideIn 1s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    
+
+    .sentence-box {
+      width: 100%;
+      height: 50px;
+      margin-top: 15px;
+      background-color: #f8d7da;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #495057;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .option-button {
+      padding: 12px;
+      border-radius: 5px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .option-button:hover {
+      background-color: #17a2b8;
+      transform: scale(1.05);
+    }
+
+    .submit-button,
+    .reset-button {
+      width: 45%;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 5px;
+      color: white;
+      border: none;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+
+    .submit-button {
+      background-color: #28a745;
+    }
+
+    .submit-button:hover {
+      transform: scale(1.05);
+    }
+
+    .reset-button {
+      background-color: #dc3545;
+    }
+
+    .reset-button:hover {
+      transform: scale(1.05);
+    }
+
+    .game-title {
+      background-color: #17a2b8;
+      color: white;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      animation: colorChange 2s infinite;
+    }
+
+    @keyframes colorChange {
+      0%,
+      100% {
+        background-color: #17a2b8;
+      }
+
+      50% {
+        background-color: #28a745;
+      }
+    }
+
+    .timer {
+      font-size: 18px;
+      color: #dc3545;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .next-btn {
+      background: #007bff;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .next-btn:hover {
+      background: #0056b3;
+    }
+
+     /* Back Button Styling */
+     .back-button {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: black;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .back-button:hover {
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+
+<body>
+  
+  <!-- Header Section with Font Awesome Back Button -->
+   <!--navbar-->
+   <nav class="navbar">
+    <div class="logo"><button class="back-button" onclick="goBack()">
+      <i class="fas fa-arrow-left"></i> 
+  </button></div>
+    <ul class="nav-links">
+        <li><a href="constitution.html">Home</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        <!-- <li><a href="#key-features">Key Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li> -->
+        <li><a href="index.html"><i class="fas fa-gamepad"></i> <!-- Font Awesome play icon --></a></li>
+        <!-- <li><a href="#contact">Contact</a></li> -->
+    </ul>
+</nav>
+
+  <div style="text-align: center; margin-top: 60px; margin-bottom: 40px; color: black ; font-weight: bolder;">
+<h1 >Decode and Understand the </h1>
+<h1>Provisions of Article 15</h1>
+</div>
+
+  <div class="game-container">
+    <div class="game-title">Decode Article 15</div>
+    <p>Complete the sentence below by selecting the correct words.</p>
+    <div class="image-grid">
+      <img src="13216.png" alt="Article 15 Symbols" width="100%" style="border-radius: 8px" />
+    </div>
+    <div class="sentence-box" id="sentenceBox"></div>
+
+    <div class="options">
+      <button class="option-button" onclick="selectWord('Place of birth')">Place of birth</button>
+      <button class="option-button" onclick="selectWord('On grounds of')">On grounds of</button>
+      <button class="option-button" onclick="selectWord('Race')">Race</button>
+      <button class="option-button" onclick="selectWord('Prohibition of')">Prohibition of</button>
+      <button class="option-button" onclick="selectWord('Caste')">Caste</button>
+      <button class="option-button" onclick="selectWord('Discrimination')">Discrimination</button>
+      <button class="option-button" onclick="selectWord('Sex')">Sex</button>
+      <button class="option-button" onclick="selectWord('Religion')">Religion</button>
+    </div>
+
+    <button class="submit-button" onclick="submitAnswer()">Submit</button>
+    <button class="reset-button" onclick="resetGame()">Reset</button>
+    <div class="timer" id="timer"></div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="footer-content">
+        <ul class="social-links">
+            <li><a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="#" class="instagram"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="#" class="twitter"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a></li>
+        </ul>
+        <p>&copy; 2024 copyright by @Ayush</p>
+    </div>
+</footer>
+
+  
+    <script>
+
+function goBack() {
+    window.location.href = "fundamental.html";
+}
+
+  // Variables
+  let selectedWords = [];
+  let score = 0;
+  let timer;
+  let timeLeft = 30;
+
+  // Start a countdown timer
+  function startTimer() {
+    timer = setInterval(() => {
+      timeLeft--;
+      document.getElementById("timer").textContent = `Time Left: ${timeLeft}s`;
+
+      if (timeLeft === 0) {
+        clearInterval(timer);
+        alert("Time's up! Please try again.");
+        resetGame();
+      }
+    }, 1000);
+  }
+
+  function selectWord(word) {
+    if (!selectedWords.includes(word)) {
+      selectedWords.push(word);
+      updateSentenceBox();
+    }
+  }
+
+  function updateSentenceBox() {
+    document.getElementById("sentenceBox").textContent = selectedWords.join(" ");
+  }
+
+  function submitAnswer() {
+    const correctSentence =
+      "Prohibition of Discrimination on grounds of Religion Race Caste Place of birth Sex";
+    const userSentence = selectedWords.join(" ");
+    if (userSentence === correctSentence) {
+      score += 10;
+      alert("Correct! You decoded Article 15 successfully.");
+      // Redirect to games page
+      window.location.href = "games.html"; // Replace "games.html" with the URL of your games page
+    } else {
+      alert("Incorrect. Please try again.");
+    }
+  }
+
+  function resetGame() {
+    selectedWords = [];
+    updateSentenceBox();
+    timeLeft = 30;
+    document.getElementById("timer").textContent = `Time Left: ${timeLeft}s`;
+    startTimer();
+  }
+
+  // Start the game when page loads
+  window.onload = function () {
+    startTimer();
+  };
+</script>
+
+  
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Code / English Puzzle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #questions {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(7, 40px);
+            grid-gap: 5px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #007BFF;
+            background-color: #ffffff;
+            font-size: 20px;
+        }
+        .black {
+            background-color: #333;
+            border: none;
+        }
+        .input-cell {
+            outline: none;
+            text-align: center;
+            font-size: 20px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: none;
+            color: #333;
+        }
+        .input-cell:focus {
+            border-bottom: 2px solid #007BFF;
+        }
+        #checkBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #checkBtn:hover {
+            background-color: #0056b3;
+        }
+        #score {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Word Code / English Puzzle</h1>
+
+<div id="questions">
+    <div>1. What is the fundamental right to equality?</div>
+    <div>2. What is the duty to promote harmony among people?</div>
+    <div>3. What is the right to freedom of speech?</div>
+    <div>4. What directive principle focuses on education?</div>
+    <div>5. What is the right against exploitation?</div>
+</div>
+
+<div id="grid"></div>
+<button id="checkBtn">Check Answers</button>
+<div id="score">Score: <span id="scoreValue">0</span></div>
+
+<script>
+    const gridData = [
+        ['', '', '', 'E', 'Q', 'U', 'A'], // EQUALITY
+        ['H', 'A', 'R', 'M', 'O', 'N', 'Y'], // HARMONY
+        ['F', '', '', '', 'E', 'D', 'U'], // FREEDOM
+        ['D', '', '', 'C', '', 'A', 'T'], // EDUCATION
+        ['E', '', '', 'N', 'T', 'A', 'X'], // EXPLOITATION
+        ['', '', '', '', '', '', ''], // Empty row for padding
+    ];
+
+    const correctAnswers = [
+        ['E', 'Q', 'U', 'A', 'L', 'I', 'T', 'Y'],
+        ['H', 'A', 'R', 'M', 'O', 'N', 'Y'],
+        ['F', 'R', 'E', 'E', 'D', 'O', 'M'],
+        ['E', 'D', 'U', 'C', 'A', 'T', 'I', 'O', 'N'],
+        ['E', 'X', 'P', 'L', 'O', 'I', 'T', 'A', 'T', 'I', 'O', 'N'],
+    ];
+
+    const gridElement = document.getElementById('grid');
+    const scoreValueElement = document.getElementById('scoreValue');
+    const checkBtn = document.getElementById('checkBtn');
+
+    let score = 0;
+
+    // Create the grid
+    gridData.forEach(row => {
+        row.forEach(cell => {
+            const cellElement = document.createElement('div');
+            cellElement.classList.add('cell');
+            if (cell === '') {
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.maxLength = 1;
+                inputElement.classList.add('input-cell');
+                cellElement.appendChild(inputElement);
+            } else {
+                cellElement.textContent = cell;
+                cellElement.classList.add('black');
+            }
+            gridElement.appendChild(cellElement);
+        });
+    });
+
+    // Check answers
+    checkBtn.onclick = function() {
+        const inputs = document.querySelectorAll('.input-cell');
+        score = 0; // Reset score
+
+        inputs.forEach((input, index) => {
+            const expectedRow = Math.floor(index / 7);
+            const expectedIndex = index % 7;
+
+            // Check if the answer matches the correct one
+            if (input.value.toUpperCase() === correctAnswers[expectedRow][expectedIndex]) {
+                score += 10; // Increment score for each correct answer
+                input.style.color = 'green'; // Highlight correct answer
+            } else {
+                input.style.color = 'red'; // Highlight incorrect answer
+            }
+        });
+
+        scoreValueElement.textContent = score; // Update score display
+    }
+</script>
+
+</body>
+</html>
